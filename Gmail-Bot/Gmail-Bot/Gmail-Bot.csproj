@@ -6,4 +6,8 @@
     <RootNamespace>Gmail_Bot</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Google.Apis.Gmail.v1" Version="1.48.0.2013" />
+  </ItemGroup>
+
 </Project>
