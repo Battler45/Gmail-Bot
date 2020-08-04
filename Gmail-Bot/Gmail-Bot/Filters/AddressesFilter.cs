@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Gmail_Bot;
 using Google.Apis.Gmail.v1.Data;
 using Microsoft.Extensions.Options;
 
-namespace Gmail_Bot.Filters
+namespace GmailBot.Filters
 {
     public class SenderEmailFilter: IMessageFilter
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Gmail_Bot
+namespace GmailBot
 {
     public class MessageFilterConfig
     {

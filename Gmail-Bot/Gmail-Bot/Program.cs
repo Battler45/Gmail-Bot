@@ -1,15 +1,14 @@
 ﻿using Google.Apis.Gmail.v1;
 using System;
-using System.Net.Mail;
+using System.Linq;
 using System.Threading.Tasks;
-using Gmail_Bot.Filters;
+using GmailBot.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MailKit.Net.Imap;
-using MailKit.Security;
+using Microsoft.Extensions.Options;
 
-namespace Gmail_Bot
+namespace GmailBot
 {
     class Program
     {
@@ -55,33 +54,8 @@ namespace Gmail_Bot
 
         private static async Task Main()
         {
-            /*
-            using var bot = ServiceProvider.GetService<GmailApi>();
-
-            var botConfig = ServiceProvider.GetService<IOptions<BotConfig>>();
-
-
-            var messages = await bot.RetrieveLastUnreadMessagesAsync(botConfig.Value.CountOfRetrieveMessages.Value);
-
-
-            var filter = ServiceProvider.GetService<IMessageFilter>();
-            messages = messages.Where(filter.Filter).ToList();
-            */
-
-            /*
-
             using var checker = ServiceProvider.GetService<GmailChecker>();
             await checker.RespondUnreadMessagesAsync();
-            using (var client = new ImapClient())
-            {
-                client.Connect("imap.gmail.com", 993, SecureSocketOptions.SslOnConnect);
-                client.Authenticate("ushiromiya7@gmail.com", "53mp3rf1d3l15");
-
-                // do stuff...
-
-                client.Disconnect(true);
-            }
-            */
         }
     }
 }

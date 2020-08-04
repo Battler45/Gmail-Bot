@@ -3,7 +3,7 @@ using System.Net.Mail;
 using Google.Apis.Gmail.v1.Data;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Gmail_Bot
+namespace GmailBot
 {
     public sealed class MessageBuilder: IDisposable
     {

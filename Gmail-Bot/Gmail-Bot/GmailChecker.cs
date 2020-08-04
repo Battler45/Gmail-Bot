@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Gmail_Bot.Filters;
+using GmailBot.Filters;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Gmail_Bot
+namespace GmailBot
 {
     public class GmailChecker : IDisposable
     {
@@ -17,14 +17,14 @@ namespace Gmail_Bot
 
         public GmailChecker(Respondent respondent, IMessageFilter messageFilter, GmailApi gmailApi, IOptions<BotConfig> config, ILogger<GmailChecker> logger)
         {
-            if (config?.Value.CountOfRetrieveMessages == null)
-                throw new ArgumentNullException();
             Logger = logger;
             (Respondent, MessageFilter, GmailApi, Config) = (respondent, messageFilter, gmailApi, config.Value);
         }
 
         public async Task RespondUnreadMessagesAsync()
         {
+            if (Config?.CountOfRetrieveMessages == null)
+                throw new ArgumentNullException();
             var messages = await GmailApi.RetrieveLastUnreadMessagesAsync(Config.CountOfRetrieveMessages.Value);
             Logger.LogInformation($"Got {messages.Count} messages");
             var filteredMessages = messages.Where(MessageFilter.Filter).ToList();

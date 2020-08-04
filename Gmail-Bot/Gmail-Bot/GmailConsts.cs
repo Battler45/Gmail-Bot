@@ -1,4 +1,4 @@
-﻿namespace Gmail_Bot
+﻿namespace GmailBot
 {
     public static class GmailConsts
     {
