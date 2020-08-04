@@ -1,68 +1,87 @@
-﻿using Google.Apis.Auth.OAuth2;
-using Google.Apis.Gmail.v1;
-using Google.Apis.Gmail.v1.Data;
-using Google.Apis.Services;
-using Google.Apis.Util.Store;
+﻿using Google.Apis.Gmail.v1;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
+using System.Net.Mail;
 using System.Threading.Tasks;
+using Gmail_Bot.Filters;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using MailKit.Net.Imap;
+using MailKit.Security;
 
-namespace GmailQuickstart
+namespace Gmail_Bot
 {
     class Program
     {
-        // If modifying these scopes, delete your previously saved credentials
-        // at ~/.credentials/gmail-dotnet-quickstart.json
-        static string[] Scopes = { GmailService.Scope.GmailReadonly };
-        static string ApplicationName = "Gmail API .NET Quickstart";
-
-        static void Main(string[] args)
+        private static IServiceProvider ServiceProvider { get; }
+        private static IConfiguration Configuration { get; }
+        static Program()
         {
-            UserCredential credential;
+            var serviceCollection = new ServiceCollection();
+            #region logger
+            serviceCollection.AddLogging(builder => builder.AddConsole());
+            #endregion
+            #region config
+            Configuration = new ConfigurationBuilder()
+                .AddJsonFile(@"appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+            #endregion
+            #region options
 
-            using (var stream = new FileStream("credentials.json", FileMode.Open, FileAccess.Read))
+            serviceCollection.AddOptions<MessageFilterConfig>()
+                .Bind(Configuration.GetSection(nameof(MessageFilterConfig)))
+                .ValidateDataAnnotations();
+            serviceCollection.AddOptions<BotConfig>()
+                .Bind(Configuration.GetSection(nameof(BotConfig)))
+                .ValidateDataAnnotations()
+                //add nested validation 
+                .Validate(config => config.ResponseTemplates.Greeting != null
+                                    && config.ResponseTemplates.ClosingWords != null
+                                    && config.ResponseTemplates.InsteadRegexFirstGroup != null);
+            //serviceCollection.AddOptions();
+
+            //serviceCollection.Configure<MessageFilterConfig>(Configuration.GetSection(nameof(MessageFilterConfig)));
+            //serviceCollection.Configure<BotConfig>(Configuration.GetSection(nameof(BotConfig)));
+            #endregion
+
+            serviceCollection.AddSingleton<IMessageFilter, SenderEmailFilter>();
+            serviceCollection.AddSingleton<Respondent>();
+            serviceCollection.AddSingleton<IAsyncFactory<GmailService>, GmailServiceFactory>();
+            serviceCollection.AddSingleton<GmailApi>();
+            serviceCollection.AddSingleton<GmailChecker>();
+
+            ServiceProvider = serviceCollection.BuildServiceProvider();
+        }
+
+        private static async Task Main()
+        {
+            /*
+            using var bot = ServiceProvider.GetService<GmailApi>();
+
+            var botConfig = ServiceProvider.GetService<IOptions<BotConfig>>();
+
+
+            var messages = await bot.RetrieveLastUnreadMessagesAsync(botConfig.Value.CountOfRetrieveMessages.Value);
+
+
+            var filter = ServiceProvider.GetService<IMessageFilter>();
+            messages = messages.Where(filter.Filter).ToList();
+            */
+
+            /*
+
+            using var checker = ServiceProvider.GetService<GmailChecker>();
+            await checker.RespondUnreadMessagesAsync();
+            using (var client = new ImapClient())
             {
-                // The file token.json stores the user's access and refresh tokens, and is created
-                // automatically when the authorization flow completes for the first time.
-                string credPath = "token.json";
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
-                    Scopes,
-                    "user",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
-                Console.WriteLine("Credential file saved to: " + credPath);
+                client.Connect("imap.gmail.com", 993, SecureSocketOptions.SslOnConnect);
+                client.Authenticate("ushiromiya7@gmail.com", "53mp3rf1d3l15");
+
+                // do stuff...
+
+                client.Disconnect(true);
             }
-
-            // Create Gmail API service.
-            var service = new GmailService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = ApplicationName,
-            });
-
-            // Define parameters of request.
-            UsersResource.LabelsResource.ListRequest request = service.Users.Labels.List("me");
-
-            // List labels.
-            IList<Label> labels = request.Execute().Labels;
-            Console.WriteLine("Labels:");
-            if (labels != null && labels.Count > 0)
-            {
-                foreach (var labelItem in labels)
-                {
-                    Console.WriteLine("{0}", labelItem.Name);
-                }
-            }
-            else
-            {
-                Console.WriteLine("No labels found.");
-            }
-            Console.Read();
+            */
         }
     }
 }
