@@ -16,7 +16,6 @@ namespace GmailBot
 
         private async Task<UserCredential> ReadCredential(string credentialPath, string tokenPath)
         {
-            var lol = File.Exists(credentialPath);
             await using var stream = new FileStream(credentialPath, FileMode.Open, FileAccess.Read);
             // The file token.json stores the user's access and refresh tokens, and is created
             // automatically when the authorization flow completes for the first time.
@@ -38,7 +37,13 @@ namespace GmailBot
             if (File.Exists(credentialPath))
                 return await ReadCredential(credentialPath, tokenPath);
 
-            throw new ArgumentException("ну, закинь ты gmail's credentials(в папку с проектом)Будь мозжучком!");
+            throw new ArgumentException("ну, закинь ты gmail's credentials(click on \"enable gmail api\" https://developers.google.com/gmail/api/quickstart/dotnet and save it in application folder)Будь мозжучком!");
+            // I could create downloader for credentials and simulation browsers's work for user's confirm to oauth2
+            // And I thought about 2 ways 
+            // 1st way is closed api
+            // 2nd way is Selenium, PhantomJS, etc   
+            // But there are "Horrible piece of shit"
+            // Because there are not reliable at all
         }
 
         public async Task<GmailService> CreateAsync()
