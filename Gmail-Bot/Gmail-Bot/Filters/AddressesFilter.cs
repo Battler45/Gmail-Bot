@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using Google.Apis.Gmail.v1.Data;
 using Microsoft.Extensions.Options;
 
-namespace GmailBot.Filters
+namespace AutomatedEmailChecker.Filters
 {
     public class SenderEmailFilter: IMessageFilter
     {
         public SenderEmailFilter(IOptions<MessageFilterConfig> options) : this(options.Value.EmailWhiteList)
         {
-            if (options?.Value?.EmailWhiteList == null)
+            if (options.Value?.EmailWhiteList == null)
             {
                 throw new ArgumentNullException("EmailWhiteList is empty");
             }

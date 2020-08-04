@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using Google.Apis.Gmail.v1.Data;
 using Microsoft.IdentityModel.Tokens;
 
-namespace GmailBot
+namespace AutomatedEmailChecker
 {
     public static class MessageExtensions
     {

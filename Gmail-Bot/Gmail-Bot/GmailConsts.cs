@@ -1,4 +1,4 @@
-﻿namespace GmailBot
+﻿namespace AutomatedEmailChecker
 {
     public static class GmailConsts
     {

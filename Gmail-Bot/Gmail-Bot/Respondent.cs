@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using Google.Apis.Gmail.v1.Data;
 using Microsoft.Extensions.Options;
 
-namespace GmailBot
+namespace AutomatedEmailChecker
 {
     public class Respondent
     {

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace GmailBot
+namespace AutomatedEmailChecker
 {
     public interface IAsyncFactory<T>
     {

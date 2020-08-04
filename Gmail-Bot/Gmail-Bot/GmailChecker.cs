@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using GmailBot.Filters;
+using AutomatedEmailChecker.Filters;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace GmailBot
+namespace AutomatedEmailChecker
 {
     public class GmailChecker : IDisposable
     {

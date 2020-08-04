@@ -7,7 +7,7 @@ using Google.Apis.Gmail.v1;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 
-namespace GmailBot
+namespace AutomatedEmailChecker
 {
     public class GmailServiceFactory : IAsyncFactory<GmailService>
     {
